@@ -1,0 +1,6 @@
+# ENV and IDE
+.idea
+.venv
+.env
+__pycache__
+vectorstore_data
