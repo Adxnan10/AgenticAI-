@@ -1,6 +1,22 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from services.llm_instance import json_llm
+from pydantic import BaseModel, Field
+from typing import Literal
+from services.generate_from_docs import format_docs, rag_chain
+from services.index_builder import retriever
+
+
+# Define a Pydantic model for hallucination grading.
+class HallucinationGrader(BaseModel):
+    binary_score: Literal["yes", "no"] = Field(
+        ...,
+        description="Indicates if the LLM generation is grounded in the facts: 'yes' means grounded, 'no' otherwise."
+    )
+
+
+structured_llm_hallucination = json_llm.with_structured_output(HallucinationGrader)
+
 
 system = (
     "You are a grader assessing whether an LLM generation is grounded in or supported by a set of retrieved facts. "
@@ -17,7 +33,7 @@ hallucination_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-hallucination_grader = hallucination_prompt | json_llm | JsonOutputParser()
+hallucination_grader = hallucination_prompt | structured_llm_hallucination
 
 # Run
 # question = "Agent Memory"
@@ -25,5 +41,5 @@ hallucination_grader = hallucination_prompt | json_llm | JsonOutputParser()
 # context = format_docs(docs)
 # generated_answer = rag_chain.invoke({"context": context, "question": question})
 # result = hallucination_grader.invoke({"documents": context, "generation": generated_answer})
-# print("Grading result:", result)
+# print("Grading result:", result.binary_score)
 

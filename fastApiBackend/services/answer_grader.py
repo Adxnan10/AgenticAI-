@@ -3,7 +3,6 @@ from services.llm_instance import json_llm
 from langchain_core.prompts import ChatPromptTemplate
 
 
-# TODO: Do the same for other json outputs, and move all pydantic data models to another dir (pydantic_models)
 class AnswerGrader(BaseModel):
     binary_score: str = Field(description="Answer addresses the question. 'yes' or 'no'")
 
@@ -21,6 +20,7 @@ answer_prompt = ChatPromptTemplate.from_messages(
 )
 
 answer_grader = answer_prompt | structured_llm_grader
+# TODO: Do the same for other json outputs, and move all pydantic data models to another dir (pydantic_models)
 
 # run
 # question = "What is Agent Memory? "
