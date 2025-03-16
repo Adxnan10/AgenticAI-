@@ -11,8 +11,8 @@ import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
-from typing import List
 from langchain_ollama import OllamaEmbeddings
+from typing import List
 from constants import ROOT_DIR
 
 

@@ -1,7 +1,7 @@
 """
 This module implements a retrieval grading pipeline that evaluates the relevance of retrieved documents to a user's query. The grader ensures that only relevant documents are processed further, filtering out erroneous retrievals based on semantic meaning and keyword matching.
 """
-from services.llm_instance import llm
+from services.llm_instance import json_llm
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 
@@ -18,7 +18,7 @@ grade_prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-retrieval_grader = grade_prompt | llm | JsonOutputParser()
+retrieval_grader = grade_prompt | json_llm | JsonOutputParser()
 #
 # question = "LLM agent memory"
 # docs = retriever.invoke(question)
