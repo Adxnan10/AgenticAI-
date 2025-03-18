@@ -103,3 +103,10 @@ async def get_chat_messages(chat_id: int, current_user: User = Depends(get_curre
 
     messages = db.query(Message).filter_by(chat_id=chat_id).all()
     return json.dumps(messages, cls=AlchemyEncoder)
+
+
+
+@router.get("/user/chats")
+async def get_user_messages(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    chats = db.query(Chat).filter_by(user_id=current_user.id).all()
+    return json.dumps(chats, cls=AlchemyEncoder)
